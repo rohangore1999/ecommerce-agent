@@ -1,241 +1,237 @@
-# Ecommerce App - Full Stack Application
+# Ecommerce Agent - AI-Powered Full Stack Application
 
-A modern full-stack ecommerce application built with React frontend and Node.js/Express backend.
+A modern, intelligent ecommerce application featuring AI-powered conversational shopping with both voice and text chat capabilities. Built with React frontend, Node.js/Express backend, and Python-based AI agent using advanced language models.
 
-## 🚀 Features
+## 🤖 AI Agent Features
 
-### Frontend (React)
+### Conversational Shopping Experience
 
-- Modern responsive UI
+- **Dual Interface**: Both voice and text-based chat interactions
+- **Natural Language Processing**: Understands customer queries in natural language
+- **Smart Product Recommendations**: AI-powered product suggestions based on cart contents
+- **Cart Management**: Add/remove products through conversation
+- **Human-in-the-Loop**: Seamless handoff to support agents when needed
+
+### Voice Capabilities
+
+- **Speech-to-Text**: Real-time voice recognition using Web Speech API
+- **Text-to-Speech**: AI-generated voice responses using OpenAI TTS
+- **Voice Commands**: Complete shopping experience through voice interaction
+- **Multi-browser Support**: Works with Chrome, Edge, and other modern browsers
+
+### AI Technologies Used
+
+- **OpenAI GPT-4**: Primary language model for conversation
+- **OpenAI TTS**: Text-to-speech synthesis with natural voices
+- **LangChain**: Agent framework and tool orchestration
+- **Function Calling**: Structured tool execution for ecommerce operations
+
+## 🏗️ Architecture Overview
+
+### Frontend (React + Vite)
+
+- Modern React application with Vite build system
+- Tailwind CSS for responsive, beautiful UI
+- ShadCN UI components for consistent design
+- Real-time chat interface with voice controls
+- Session-based cart management
 - Product catalog with search and filtering
-- Shopping cart functionality
-- Category-based navigation
-- Product details with size/color selection
-- Session-based cart persistence
 
 ### Backend (Node.js/Express)
 
-- RESTful API endpoints
-- Product management
-- Shopping cart management
-- Session-based storage
-- CORS enabled
+- RESTful API server
+- Session-based cart storage
+- Product management endpoints
+- CORS-enabled for cross-origin requests
 - Comprehensive error handling
+- Product search and recommendation APIs
 
-## 📁 Project Structure
+### AI Agent (Python)
 
-```
-ecommerce-agent/
-├── backend/                 # Node.js/Express API server
-│   ├── index.js            # Main server file
-│   ├── package.json        # Backend dependencies
-│   └── README.md          # Backend documentation
-├── frontend/               # React application
-│   ├── src/
-│   │   ├── services/
-│   │   │   └── api.js     # API service (updated for real backend)
-│   │   └── data/
-│   │       └── mockData.js # Original mock data (now served by backend)
-│   └── package.json       # Frontend dependencies
-├── start-dev.sh           # Development startup script
-└── README.md             # This file
-```
+- Async Python agent using OpenAI Agents framework
+- Function tools for ecommerce operations
+- SSL-disabled HTTP client for development
+- Session-based cart integration
+- Support agent handoff capability
 
-## 🛠️ Setup and Installation
+## 🚀 Complete Setup Guide
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
+- **Node.js** (v16 or higher)
+- **Python** (v3.8 or higher)
+- **npm** or **yarn**
+- **OpenAI API Key** (for AI agent and TTS)
 
-### Quick Start
+### 1. Environment Setup
 
-1. **Clone and navigate to the project:**
+**Create environment files:**
 
 ```bash
-cd ecommerce-agent
+# Frontend environment (.env in frontend/)
+VITE_OPENAI_API_KEY=your_openai_api_key_here
+
+# Agent environment (.env in agent/)
+OPEN_API_KEY=your_openai_api_key_here
 ```
 
-2. **Install backend dependencies:**
+### 2. Backend Setup
 
 ```bash
 cd backend
 npm install
-cd ..
+npm run dev  # Starts on http://localhost:3001
 ```
 
-3. **Install frontend dependencies:**
+### 3. Frontend Setup
 
 ```bash
 cd frontend
 npm install
-cd ..
+npm run dev  # Starts on http://localhost:3000
 ```
 
-4. **Start both servers with one command:**
+### 4. AI Agent Setup
 
 ```bash
-./start-dev.sh
+cd agent
+pip install -r requirements.txt
+python api.py  # Starts Flask server on http://localhost:5001
 ```
 
-This will start:
-
-- Backend server on `http://localhost:3001`
-- Frontend development server on `http://localhost:3000`
-
-### Manual Setup
-
-If you prefer to start servers manually:
-
-**Backend:**
+### 5. Quick Start (All Services)
 
 ```bash
-cd backend
-npm run dev  # or npm start for production
+# Terminal 1: Backend
+cd backend && npm run dev
+
+# Terminal 2: Frontend
+cd frontend && npm run dev
+
+# Terminal 3: AI Agent
+cd agent && python api.py
 ```
 
-**Frontend:**
+## 🔧 AI Agent Implementation Details
 
-```bash
-cd frontend
-npm start
+### Core Agent Architecture
+
+The AI agent is built using the OpenAI Agents framework with the following components:
+
+#### Function Tools
+
+```python
+@function_tool
+async def get_cart_items() -> int:
+    """Get productIds of items in cart"""
+
+@function_tool
+async def recommend_products(cart_item: str) -> int:
+    """Recommend products based on cart contents"""
+
+@function_tool
+async def add_product_to_cart(product_name: str) -> int:
+    """Add product to cart by name"""
+
+@function_tool
+async def remove_product_from_cart(product_name: str) -> int:
+    """Remove product from cart by name"""
+
+@function_tool
+def get_connect_to_support_agent(text: str) -> str:
+    """Human-in-the-loop support agent handoff"""
 ```
 
-## 🔌 API Integration
+#### Agent Configuration
 
-The frontend has been updated to connect to the real backend API instead of using mock data:
+- **Model**: GPT-4.1 for advanced reasoning
+- **Instructions**: Structured JSON response format
+- **Tools**: Ecommerce-specific function tools
+- **Session Management**: Persistent cart state
 
-### Key Changes Made:
+### Voice Integration
 
-- ✅ Removed mock data and localStorage dependencies from frontend
-- ✅ Updated `api.js` to make real HTTP requests
-- ✅ Added session-based cart management
-- ✅ Implemented proper error handling
-- ✅ All CRUD operations now use backend endpoints
+#### Speech-to-Text (Frontend)
 
-### API Endpoints:
-
-**Products:**
-
-- `GET /api/products` - Get all products
-- `GET /api/products/:id` - Get product by ID
-- `GET /api/products/category/:category` - Filter by category
-- `GET /api/products/search/:query` - Search products
-- `GET /api/categories` - Get all categories
-
-**Cart:**
-
-- `GET /api/cart/:sessionId` - Get cart
-- `POST /api/cart/:sessionId/add` - Add to cart
-- `PUT /api/cart/:sessionId/update` - Update cart item
-- `DELETE /api/cart/:sessionId/remove/:itemId` - Remove from cart
-- `DELETE /api/cart/:sessionId/clear` - Clear cart
-
-## 🔧 Development
-
-### Backend Development
-
-```bash
-cd backend
-npm run dev  # Uses nodemon for auto-restart
+```javascript
+// Web Speech API implementation
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+recognitionRef.current = new SpeechRecognition();
+recognitionRef.current.continuous = false;
+recognitionRef.current.interimResults = false;
+recognitionRef.current.lang = "en-US";
 ```
 
-### Frontend Development
+#### Text-to-Speech (AI-Generated)
 
-```bash
-cd frontend
-npm start  # React development server with hot reload
+```javascript
+// OpenAI TTS integration
+const audio = await generateSpeech({
+  model: openai.speech("tts-1"),
+  voice: "coral",
+  text: responseText,
+  instructions: "Speak in a cheerful and positive tone.",
+});
 ```
 
-## 📊 Data Flow
+## 🔌 API Integration & Data Flow
 
-1. **Frontend** makes API calls to backend endpoints
-2. **Backend** processes requests and returns JSON responses
-3. **Cart data** is stored on the backend with session-based management
-4. **Product data** is served from the backend (moved from frontend mock data)
+### Frontend ↔ Backend Communication
 
-## 🚀 Production Deployment
+- **Products API**: GET `/api/products`, `/api/products/:id`, `/api/products/category/:category`
+- **Search API**: GET `/api/products/search/:query`
+- **Cart API**: GET/POST/PUT/DELETE `/api/cart/:sessionId/*`
+- **Recommendations**: GET `/api/products/:id/recommendations`
 
-### Backend
+### Frontend ↔ AI Agent Communication
 
-```bash
-cd backend
-npm start
-```
+- **Chat Endpoint**: POST `http://localhost:5001/chat`
+- **Payload**: `{ user_input: "user message" }`
+- **Response**: JSON with `agent_response_text` and optional `agent_response_productIds`
 
-### Frontend
+### AI Agent ↔ Backend Communication
 
-```bash
-cd frontend
-npm run build
-# Serve the build folder with a static server
-```
+- **Cart Operations**: HTTP requests to backend cart endpoints
+- **Product Lookup**: Name-to-ID resolution for cart operations
+- **Session Management**: Consistent session ID across requests
 
-## 🔮 Future Enhancements
+## 🎯 Key Features Breakdown
 
-### Backend
+### 1. Intelligent Chat Interface
 
-- Database integration (MongoDB/PostgreSQL)
-- User authentication and authorization
-- Order management system
-- Payment processing integration
-- Admin panel for product management
-- Product reviews and ratings
+- **Dual Mode**: Toggle between text and voice agents
+- **Real-time Responses**: Immediate AI-powered responses
+- **Product Integration**: Display products directly in chat
+- **Context Awareness**: Maintains conversation context
 
-### Frontend
+### 2. Voice Shopping Experience
 
-- User authentication UI
-- Order history
-- Wishlist functionality
-- Advanced filtering options
-- Mobile app (React Native)
+- **Voice Commands**: "Add Nike shoes to cart", "Show me my cart items"
+- **Natural Responses**: AI speaks back with natural voice
+- **Hands-free Shopping**: Complete shopping without typing
+- **Error Handling**: Graceful handling of speech recognition errors
 
-## 🐛 Troubleshooting
+### 3. Smart Recommendations
 
-### Common Issues
+- **Context-Aware**: Based on current cart contents
+- **AI-Powered**: Uses GPT-4 for intelligent suggestions
+- **Visual Display**: Products shown with images and details
+- **One-Click Add**: Easy addition to cart from recommendations
 
-**Backend not starting:**
+### 4. Session Management
 
-- Check if port 3001 is available
-- Ensure all dependencies are installed: `npm install`
-- Check console for error messages
+- **Persistent Cart**: Cart survives page refreshes
+- **Session-Based**: No user accounts required
+- **Real-time Updates**: Cart updates immediately after AI operations
 
-**Frontend can't connect to backend:**
 
-- Ensure backend is running on port 3001
-- Check CORS configuration
-- Verify API endpoint URLs in `frontend/src/services/api.js`
+## 🔮 Advanced Features
 
-**Cart not persisting:**
+### Human-in-the-Loop Support
 
-- Cart data is session-based on backend
-- Clearing browser data will reset session
-- In production, implement user-based cart storage
+- **Seamless Handoff**: AI can transfer to human agents
+- **Context Preservation**: Full conversation history maintained
+- **Support Integration**: Real-time support agent responses
+- **Fallback Mechanism**: When AI cannot handle requests
 
-## 📝 Environment Variables
-
-**Backend:**
-
-- `PORT` - Server port (default: 3001)
-
-**Frontend:**
-
-- API base URL is configured in `src/services/api.js`
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-**Happy coding! 🎉**
-
-For more detailed backend documentation, see [`backend/README.md`](backend/README.md)

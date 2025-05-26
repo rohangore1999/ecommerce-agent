@@ -105,6 +105,26 @@ async def remove_product_from_cart(product_name: str)-> int:
     
     return response.json()
 
+# Human in the loop
+@function_tool
+def get_connect_to_support_agent(text: str) -> str:
+    """
+    As user asks to connect to the support agent, connect to the support agent
+
+    Args:
+        text (str): The question ask by the user
+    
+    Returns:
+        str: The support agent response.
+    """
+    print(f"\n📝 The user is asking to connect to the support agent:\n{text}\n")
+    
+    support_agent_response = input("Respond to the user: ")
+    
+    print(f"\n📝 The support agent response:\n{support_agent_response}\n")
+    
+    return support_agent_response
+
 
 # Agents
 get_cart_items = Agent(
@@ -144,11 +164,16 @@ get_cart_items = Agent(
                 "agent_response_text": "Product Removed Successfully",
             }
         
-        - View the cart
-        - View the products
+        - If the user asks to connect to the support agent, connect to the support agent
+            Wait for the support agent to respond to the user
+            
+            JSON Output format:
+            {
+                "agent_response_text": "Response from the support Team: {support_agent_response}",
+            }
     """,
     model="gpt-4.1",
-    tools=[get_cart_items, recommend_products, add_product_to_cart, remove_product_from_cart]
+    tools=[get_cart_items, recommend_products, add_product_to_cart, remove_product_from_cart, get_connect_to_support_agent]
 )
 
 async def chat(user_input_data):
