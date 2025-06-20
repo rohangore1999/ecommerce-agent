@@ -35,11 +35,6 @@ export const chat = async (userInputData) => {
   try {
     const response = await api.post("/chat", payload);
 
-    // const response = {
-    //   agent_response:
-    //     '{\n    "agent_response_text": "Here are list of products from Cart: ",\n    "agent_response_productIds": ["1", "2"]\n}',
-    // };
-
     if (isValidJSON(response?.data?.agent_response)) {
       const jsonResponse = JSON.parse(response?.data?.agent_response);
 
@@ -58,9 +53,10 @@ export const speak = async (text) => {
   try {
     const audio = await generateSpeech({
       model: openai.speech("tts-1"),
-      voice: "coral", // or alloy, echo, fable, onyx, nova, shimmer
+      voice: "nova",
       text: text,
-      instructions: "Speak in a cheerful and positive tone.",
+      instructions:
+        'Affect/personality: A cheerful guide \n\nTone: Friendly, clear, and reassuring, creating a calm atmosphere and making the listener feel confident and comfortable.\n\nPronunciation: Clear, articulate, and steady, ensuring each instruction is easily understood while maintaining a natural, conversational flow.\n\nPause: Brief, purposeful pauses after key instructions (e.g., "cross the street" and "turn right") to allow time for the listener to process the information and follow along.\n\nEmotion: Warm and supportive, conveying empathy and care, ensuring the listener feels guided and safe throughout the journey.',
     });
 
     const generatedAudio = audio.audio;
@@ -79,9 +75,13 @@ export const speak = async (text) => {
       .catch((error) => console.error("Error playing audio:", error));
 
     // Optional: Release the URL when done
+    const originalOnended = audioElement.onended;
     audioElement.onended = () => {
       URL.revokeObjectURL(url);
       console.log("Audio playback ended, URL revoked");
+      if (originalOnended) {
+        originalOnended();
+      }
     };
 
     return audioElement;

@@ -107,7 +107,7 @@ async def remove_product_from_cart(product_name: str)-> int:
 
 # Human in the loop
 @function_tool
-def get_connect_to_support_agent(text: str) -> str:
+async def get_connect_to_support_agent(text: str) -> str:
     """
     As user asks to connect to the support agent, connect to the support agent
 
@@ -118,8 +118,11 @@ def get_connect_to_support_agent(text: str) -> str:
         str: The support agent response.
     """
     print(f"\n📝 The user is asking to connect to the support agent:\n{text}\n")
+    print("⏳ Waiting for support agent response...")
     
-    support_agent_response = input("Respond to the user: ")
+    # Use asyncio to handle input in async context
+    loop = asyncio.get_event_loop()
+    support_agent_response = await loop.run_in_executor(None, input, "Support Agent, respond to the user: ")
     
     print(f"\n📝 The support agent response:\n{support_agent_response}\n")
     
@@ -165,11 +168,12 @@ get_cart_items = Agent(
             }
         
         - If the user asks to connect to the support agent, connect to the support agent
-            Wait for the support agent to respond to the user
+            Call the get_connect_to_support_agent function and wait for the human support agent to respond.
+            Use the actual response from the support agent in your output.
             
             JSON Output format:
             {
-                "agent_response_text": "Response from the support Team: {support_agent_response}",
+                "agent_response_text": "Response from the support Team: [Insert the actual support agent response here]",
             }
     """,
     model="gpt-4.1",
